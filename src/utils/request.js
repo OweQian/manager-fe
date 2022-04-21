@@ -23,7 +23,7 @@ service.interceptors.response.use(res => {
   const { code, data, msg } = res.data
   if (code === 200) {
     return data
-  } else if (code === 400001) {
+  } else if (code === 40001) {
     ELMessage.error(TOKEN_INVALID)
     setTimeout(() => {
       router.push('/login')
@@ -34,3 +34,34 @@ service.interceptors.response.use(res => {
     return Promise.reject(msg || NETWORK_ERROR)
   }
 })
+
+/**
+ * 请求核心函数
+ * options 请求配置
+ * */
+function request(options) {
+  options.method = options.method || 'get'
+  if (options.method.toLowerCase() === 'get') {
+    options.params = options.data
+  }
+
+  if (config.env === 'prod') {
+    service.default.baseURL = config.baseApi
+  } else {
+    service.default.baseURL = config.mock ? config.mockApi : config.baseApi
+  }
+  return service(options)
+}
+
+['get', 'post', 'put', 'delete', 'patch'].forEach(item => {
+  request[item] = (url, data, options) => {
+    return request({
+      url,
+      data,
+      method: item,
+      ...options
+    })
+  }
+})
+
+export default request;
