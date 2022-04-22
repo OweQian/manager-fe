@@ -3,7 +3,7 @@
  * */
 import axios from 'axios';
 import config from '../config'
-import { ELMessage }from 'element-plus'
+import { ElMessage }from 'element-plus'
 import router from '../router'
 
 const TOKEN_INVALID = 'Token认证失败，请重新登录'
@@ -24,13 +24,13 @@ service.interceptors.response.use(res => {
   if (code === 200) {
     return data
   } else if (code === 40001) {
-    ELMessage.error(TOKEN_INVALID)
+    ElMessage.error(TOKEN_INVALID)
     setTimeout(() => {
       router.push('/login')
     }, 15000)
     return Promise.reject(TOKEN_INVALID)
   } else {
-    ELMessage.error(msg || NETWORK_ERROR)
+    ElMessage.error(msg || NETWORK_ERROR)
     return Promise.reject(msg || NETWORK_ERROR)
   }
 })

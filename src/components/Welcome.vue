@@ -11,5 +11,9 @@ const goLogin = () => {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.welcome {
+  background-color: #ffffff;
+  height: 100%;
+}
 </style>
